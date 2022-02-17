@@ -180,6 +180,54 @@
 </p>
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+  
+<p>
+  Level sampling is where you include different resolutions of the texture image so that when performing texture sampling, 
+  differing texture space sampling frequences at different parts of the image will be sampled from different resolutions, so as to not cause aliasing problems.
+  Otherwise, when sampling textures on far away objects, minification can occur which will cause aliasing if the texture image has much higher resolution.
+  We implemented level sampling by calculating the derivatives (du/dx, dv/dx), (du/dy, dv/dy) by calculating uv @ (x,y), (x+1,y), (x,y+1) and using the scaled differences as derivatives.
+  We then used the formulas from the lecture slides to calculate the float value of the level (D).
+  For linear interpolation, we used the lerp function we defined with D to interpolate between colors from the two nearest levels.
+  For nearest, we just rounded D to the nearest integer.
+</p>
+  
+<p>
+  Tradeoffs between pixel sampling, level sampling, and number of samples per pixel:
+  Pixel sampling is very lightweight and fast in terms of speed and memory usage. However, there is not much antialiasing power.
+  Although bilinear sampling performs better than nearest, there will still not be much antialiasing when the texture image's resolution significantly differs from
+  the local sampling frequency.
+  Level sampling is costly for memory since it must store texture images at different resolutions, 
+  and there is the time overhead of having to generage mipmaps at different levels. 
+  However, it is good at antialiasing, especially when different parts of the image have different texture sampling frequencies since levels can be dynamically determined.
+  Increasing the number of samples per pixel is very costly in terms of memory and speed, especially if we store the subsamples before drawing to the frame buffer.
+  However, when the number of samples per pixel is high, it is very good at antialiasing.
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="./LZEROPNEAREST.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_ZERO, P_NEAREST: 1</figcaption>
+      </td>
+      <td>
+        <img src="./LZEROPLINEAR.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_ZERO, P_LINEAR</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="./LNEARESTPNEAREST.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_NEAREST, P_NEAREST: 1</figcaption>
+      </td>
+      <td>
+        <img src="./LNEARESTPLINEAR.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_NEAREST, P_LINEAR</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 
