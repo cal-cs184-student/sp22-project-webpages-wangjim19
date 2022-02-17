@@ -115,6 +115,25 @@
 <h2 align="middle">Section II: Sampling</h2>
 
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
+  
+<p>
+  Barycentric coordinates are where points in a triangle are specified by their proportional distances from each of the 3 vertices. 
+  When interpolating textures/colors, we can just specify the colors at the vertices, and take the color at a point as an average of the 3 colors, weighted by the point's distance from each vertex.
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <img src="./barycentriccolor.png" align="middle" width="600px"/>
+    <figcaption align="middle">Barycentric</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./Screen\ Shot\ 2022-02-16\ at\ 6.25.11\ PM.png" align="middle" width="600px"/>
+    <figcaption align="middle">Barycentric</figcaption>
+  </table>
+</div>
 
 
 <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
