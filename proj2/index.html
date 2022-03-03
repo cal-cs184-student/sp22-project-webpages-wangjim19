@@ -138,11 +138,12 @@
 </div>
 
 
-<h3 align="middle">Part 4: Barycentric coordinates</h3>
+<h3 align="middle">Part 4: Edge flip</h3>
   
 <p>
-  Barycentric coordinates are where points in a triangle are specified by their proportional distances from each of the 3 vertices. 
-  When interpolating textures/colors, we can just specify the colors at the vertices, and take the color at a point as an average of the 3 colors, weighted by the point's distance from each vertex.
+  We first retrieved all of the relevant vertices, faces, and half-edges. Then, we set the half-edge for each vertex and face appropriately, then set the next and vertex of the flipped halfedges, and then the next and face of the other halfedges along the two faces.
+  To debug, we tried writing out each of the class members of each modified element and comparing this to a diagram we drew. We also tried changing things like positions of points to verify that we were referencing the correct points.
+  In the end, weird pointer/address things were the most difficult for us to debug.
 </p>
   
 <div align="middle">
