@@ -112,8 +112,16 @@
     <figcaption align="middle">Screenshot of bez/teapot.bez</figcaption>
   </table>
 </div>
+  
+<h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
-<h3 align="middle">Part 3: Transforms</h3>
+<h3 align="middle">Part 3: Area-weighted vertex normals</h3>
+  
+<p>
+  We looped through the faces by iteratively getting halfedge->twin->next, which gives us the next adjacent halfedge to the vertex. 
+  For each face, we use the vertices to construct two vectors along the edges, and get the cross-product to get the area-weighted normal. 
+  We then sum these up and divide by the total area (sums of magnitudes of the cross-products) to get the final result.
+</p>
   
 <div align="middle">
   <table style="width=100%">
@@ -121,13 +129,7 @@
     <figcaption align="middle">Screenshot of bez/teapot.bez</figcaption>
   </table>
 </div>
-<p>
-  Cubeman just came back from the gym and is looking extra swole. Note his buffed up legs and rock hard biceps. He is also flexing to the ladies to show off his calves
-  and sexy arm muscles.
-</p>
 
-
-<h2 align="middle">Section II: Sampling</h2>
 
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
   
