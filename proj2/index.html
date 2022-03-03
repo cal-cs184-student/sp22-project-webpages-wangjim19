@@ -160,6 +160,90 @@
   </table>
 </div>
 
+<h3 align="middle">Part 5: Edge split</h3>
+  
+<p>
+We implemented the edge split operation by creating the necessary new mesh elements, and then methodically working through the necessary pointer reassignments. We ended up creating a new vertex, two new faces, three new edges, and six new half-edges. We then reassigned nearly all of the pointers, fixing in groups by edges, then halfedges, then faces, then the new vertex.
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <img src="./before-flips.png" align="middle" width="600px"/>
+    <figcaption align="middle">Teapot before edge splits</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./after-splits.png" align="middle" width="600px"/>
+    <figcaption align="middle">Teapot after edge splits</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./after-splits-and-flips.png" align="middle" width="600px"/>
+    <figcaption align="middle">Teapot after both edge splits and edge flips</figcaption>
+  </table>
+</div>
+
+<p>
+Our debugging journey was pretty fun. We decided to work separately on parts 4 and 5 since they were similar ideas, and we ended up both encountering similar problems. Namely, we would often get black triangles or disappearing faces when we tried to apply our edge operations.
+After debugging individually, we tried swapping our code and reviewing each others' implementations, and we were able to quickly spot mistakes that the other person was making. I think it was a cool demonstration of how it's easy to get stuck in loops in your own brain that make it difficult to see where your thinking is wrong, but having someone else offer a second perspective can help you see new insights.
+</p>
+
+<h3 align="middle">Part 6: Loop subdivision</h3>
+
+<p>
+We implemented loop subdivision by mostly following the outline given in the source code. One issue that we had was that we wanted to use the <code>isNew</code> flag to stop the split loop and also detect new edges, but it wasn't possible to do both at the same time. The adjustment we made was adding a flag for edges called <code>isSplit</code> that helped track when edges were called in the first splitting loop. We left the <code>isNew</code> flag to detect the blue edges that were flip candidates.
+</p>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./torus0.png" align="middle" width="600px"/>
+    <figcaption align="middle">Torus without loop subdivision</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./torus1.png" align="middle" width="600px"/>
+    <figcaption align="middle">Torus after one loop subdivision</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./torus2.png" align="middle" width="600px"/>
+    <figcaption align="middle">Torus after two loop subdivisions</figcaption>
+  </table>
+</div>
+
+<p>
+As we can see from the screenshots, as we do more loop subdivisions, sharp corners and edges seem to be smoothed out. The torus begins with very sharp edges in a polygonal shape, but quickly turns into the round shape that we expect.
+</p>
+
+<p>
+For the cube mesh, we notice that the cube becomes slightly asymmetrical after repeated subdivisions. This might be because the faces in the cube are not arranged in a symmetrical way. Below, we show some preprocessing that results in a more symmetric upsampled result.
+</p>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./cube0.png" align="middle" width="600px"/>
+    <figcaption align="middle">Cube after preprocessing</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./cube1.png" align="middle" width="600px"/>
+    <figcaption align="middle">Preprocessed cube after loop subdivision</figcaption>
+  </table>
+</div>
+
+<p>
+As we can see in the preprocessed screenshot, the triangles in the cube mesh are in a more symmetric arrangement. That is, there are four corners that meet at the top of a pyramid-like arrangement of triangles, and four other corners that meet at the endpoints of the edge through each face. Both these sets of four corners have the same relative arrangement, just in opposite directions. This results in the symmetrical, rounded-tetrahedron-like shape after loop subdivision.
+</p>
 
 </body>
 </html>
