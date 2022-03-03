@@ -1,7 +1,242 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 2 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Mesh Edit</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2022</h1>
+<h1 align="middle">Project 2: Mesh Edit</h1>
+<h2 align="middle">Alan Zhu, Jim Wang</h2>
+
+<div>
+
+<h2 align="middle">LINK TO WEBPAGE: https://cal-cs184-student.github.io/sp22-project-webpages-wangjim19/proj2/index.html </h2>
+  
+<h2 align="middle">Overview</h2>
+<p>
+  In this project, we wrote code to draw curves and surfaces and manipulate meshes.
+  We applied different techniques learned in lecture such as de Casteljau's algorithm for computing Bezier curves and area-weighted normals, as well as mesh manipulation techniques.
+  This project really helped us better understand how smooth surfaces and curves are computed in graphics, and it solidified the idea of meshes to represent 3d geometries, and the data sturcutres used to implement them.
+  We found the representation of triangle meshes very interesting, and we are glad to have gained firsthand experience in how different operations can be implemented using the halfedge representation.
+</p>
+
+<h2 align="middle">Section I: Bezier Curves and Surfaces</h2>
+
+<h3 align="middle">Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
+
+<p>
+  De Casteljau's algorithm is a recursive method for evaluating a point (chosen by parameter t) along a Bezier curve parametrized by some points.
+  We implemented it by using a series of linear interpolations between each two consecutive points to generate n-1 new points. This is then applied recursively until we narrow down to one point.
+  
+</p>
+
+<p>
+  Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because we iterate exactly through the bounding box of the triangle, and on each iteration we only perform constant time arithmetic calculations.
+</p>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./screenshot_2-16_15-47-11.png" align="middle" width="600px"/>
+    <figcaption align="middle">Screenshot of basic/test4.svg</figcaption>
+  </table>
+</div>
+
+
+<h3 align="middle">Part 2: Antialiasing triangles</h3>
+
+<p>
+  Our supersampling algorithm is as follows:
+  <ol>
+    <li>Supersample into sample buffer.</li>
+    <li>Resolve to framebuffer by averaging from sample buffer.</li>
+  </ol>
+  We found supersampling to be very useful in reducing aliasing in our renders. As we increased the sampling rate, we noticed that artifacts like jaggies became less and less prominent.
+  Changes we made in this task include taking into account the sampling rate when setting the size of our sample buffer, so that we could supersample into a higher resolution buffer.
+  In our rasterization functions, we also adjusted the bounds and increment sizes of our sampling loops to correctly sample at a higher rate.
+  Finally, to resolve from the sample buffer to the frame buffer, we averaged the colors from our sample buffer to get the final color of the corresponding frame buffer pixel.
+</p>
+
+<div align="middle">
+  <table>
+    <tr align="center">
+      <td>
+        <img src="./screenshot_2-16_16-1-27.png" align="middle" width="400px"/>
+        <figcaption align="middle">Sample rate: 1</figcaption>
+      </td>
+      <td>
+        <img src="./screenshot_2-16_16-1-31.png" align="middle" width="400px"/>
+        <figcaption align="middle">Sample rate: 4</figcaption>
+      </td>
+      <td>
+        <img src="./screenshot_2-16_16-1-34.png" align="middle" width="400px"/>
+        <figcaption align="middle">Sample rate: 16</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p>
+  As seen from the screenshots, as sampling rate increases, we get more graduated changes in color at the thin edges of our triangles.
+  This is because each pixel in the image is being averaged from multiple supersamples, and at the edge of a shape there will be only a fraction of samples inside the shape, hence resulting in a shade of the original color.
+  This effect reduces the appearance of artifacts since edges become "softer" in a sense, gradually changing between the shape and the surroundings, as opposed to an image without supersampling that simply takes the full color of the sampled pixel.
+</p>
+
+<h3 align="middle">Part 3: Transforms</h3>
+  
+<div align="middle">
+  <table style="width=100%">
+    <img src="./cubeman-swole.png" align="middle" width="600px"/>
+    <figcaption align="middle">Screenshot of svg/transforms/my_robot.svg</figcaption>
+  </table>
+</div>
+<p>
+  Cubeman just came back from the gym and is looking extra swole. Note his buffed up legs and rock hard biceps. He is also flexing to the ladies to show off his calves
+  and sexy arm muscles.
+</p>
+
+
+<h2 align="middle">Section II: Sampling</h2>
+
+<h3 align="middle">Part 4: Barycentric coordinates</h3>
+  
+<p>
+  Barycentric coordinates are where points in a triangle are specified by their proportional distances from each of the 3 vertices. 
+  When interpolating textures/colors, we can just specify the colors at the vertices, and take the color at a point as an average of the 3 colors, weighted by the point's distance from each vertex.
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <img src="./barycentriccolor.png" align="middle" width="600px"/>
+    <figcaption align="middle">Barycentric</figcaption>
+  </table>
+</div>
+
+<div align="middle">
+  <table style="width=100%">
+    <img src="./task4ss.png" align="middle" width="600px"/>
+    <figcaption align="middle">svg/basic/test7.svg screenshot</figcaption>
+  </table>
+</div>
+
+
+<h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
+
+<p>
+  Pixel sampling is the practice of determining the color at a location in a texture mapping based on the colors at surrounding pixels in a texture image.
+  In this task, we implemented two different pixel sampling algorithms to perform texture mapping.
+  The first pixel sampling method was nearest sampling. In this method, we return the closest pixel to a texture coordinate in a texture image by taking the closer of the floor/ceiling for each coordinate, clamping when necessary to stay within the bounds of the image.
+  The second pixel sampling methods was bilinear sampling. In this method, we first find the four closest points in the texture image to the given coordinate.
+  Then, we perform a set of linear interpolations to return a weighted average (proportional to distance from sample coordinate) of the colors of each texel.
+</p>
+
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="./screenshot_2-16_16-33-7.png" align="middle" width="400px"/>
+        <figcaption align="middle">Nearest sampling, sample rate: 1</figcaption>
+      </td>
+      <td>
+        <img src="./screenshot_2-16_16-33-12.png" align="middle" width="400px"/>
+        <figcaption align="middle">Nearest sampling, sample rate: 16</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="./screenshot_2-16_16-33-9.png" align="middle" width="400px"/>
+        <figcaption align="middle">Bilinear sampling, sample rate: 1</figcaption>
+      </td>
+      <td>
+        <img src="./screenshot_2-16_16-33-15.png" align="middle" width="400px"/>
+        <figcaption align="middle">Bilinear sampling, sample rate: 16</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p>
+  When sampling rate is 1, we see significantly more artifacts in nearest sampling, with more prominent jaggies and disconnected lines. In contrast, the lines in bilinear sampling are more smooth.
+  Similarly, when sampling rate is 16, we see slightly more jagged lines when using nearest sampling vs bilinear sampling.
+  Based on these screenshots, it seems that there might be a large difference between bilinear and nearest sampling when there are lines or sharp changes between colors within the image, for example in the white latitude and longitude lines on the blue background in the screenshots provided.
+  Since bilinear sampling takes some averages of points, it has more antialiasing effects than nearest sampling, which results in sharper edges and artifacts.
+</p>
+
+<h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+  
+<p>
+  Level sampling is where you include different resolutions of the texture image so that when performing texture sampling, 
+  differing texture space sampling frequences at different parts of the image will be sampled from different resolutions, so as to not cause aliasing problems.
+  Otherwise, when sampling textures on far away objects, minification can occur which will cause aliasing if the texture image has much higher resolution.
+  We implemented level sampling by calculating the derivatives (du/dx, dv/dx), (du/dy, dv/dy) by calculating uv @ (x,y), (x+1,y), (x,y+1) and using the scaled differences as derivatives.
+  We then used the formulas from the lecture slides to calculate the float value of the level (D).
+  For linear interpolation, we used the lerp function we defined with D to interpolate between colors from the two nearest levels.
+  For nearest, we just rounded D to the nearest integer.
+</p>
+  
+<p>
+  Tradeoffs between pixel sampling, level sampling, and number of samples per pixel:
+  Pixel sampling is very lightweight and fast in terms of speed and memory usage. However, there is not much antialiasing power.
+  Although bilinear sampling performs better than nearest, there will still not be much antialiasing when the texture image's resolution significantly differs from
+  the local sampling frequency.
+  Level sampling is costly for memory since it must store texture images at different resolutions, 
+  and there is the time overhead of having to generage mipmaps at different levels. 
+  However, it is good at antialiasing, especially when different parts of the image have different texture sampling frequencies since levels can be dynamically determined.
+  Increasing the number of samples per pixel is very costly in terms of memory and speed, especially if we store the subsamples before drawing to the frame buffer.
+  However, when the number of samples per pixel is high, it is very good at antialiasing.
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="./LZEROPNEAREST.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_ZERO, P_NEAREST</figcaption>
+      </td>
+      <td>
+        <img src="./LZEROPLINEAR.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_ZERO, P_LINEAR</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="./LNEARESTPNEAREST.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_NEAREST, P_NEAREST</figcaption>
+      </td>
+      <td>
+        <img src="./LNEARESTPLINEAR.png" align="middle" width="400px"/>
+        <figcaption align="middle">L_NEAREST, P_LINEAR</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+
+<h2 align="middle">Section III: Art Competition</h2>
+<p>If you are not participating in the optional art competition, don't worry about this section!</p>
+
+<h3 align="middle">Part 7: Draw something interesting!</h3>
+
+</body>
 </html>
