@@ -99,51 +99,26 @@
 </div>
 
 
-<h3 align="middle">Part 2: Antialiasing triangles</h3>
+<h3 align="middle">Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
 
 <p>
-  Our supersampling algorithm is as follows:
-  <ol>
-    <li>Supersample into sample buffer.</li>
-    <li>Resolve to framebuffer by averaging from sample buffer.</li>
-  </ol>
-  We found supersampling to be very useful in reducing aliasing in our renders. As we increased the sampling rate, we noticed that artifacts like jaggies became less and less prominent.
-  Changes we made in this task include taking into account the sampling rate when setting the size of our sample buffer, so that we could supersample into a higher resolution buffer.
-  In our rasterization functions, we also adjusted the bounds and increment sizes of our sampling loops to correctly sample at a higher rate.
-  Finally, to resolve from the sample buffer to the frame buffer, we averaged the colors from our sample buffer to get the final color of the corresponding frame buffer pixel.
+  To compute a point on a bezier surface, we parametrize by u and v. We take the nxn grid of 3d points and apply de Casteljau on each row with u, then apply it on the resulting points with v.
+  We implemented it using 3 helper functions: the first does the same as part 1, the second calls the firat recursively on a 1d array of points, and the 3rd calls the second on each row, then on the final array.
 </p>
 
 <div align="middle">
-  <table>
-    <tr align="center">
-      <td>
-        <img src="./screenshot_2-16_16-1-27.png" align="middle" width="400px"/>
-        <figcaption align="middle">Sample rate: 1</figcaption>
-      </td>
-      <td>
-        <img src="./screenshot_2-16_16-1-31.png" align="middle" width="400px"/>
-        <figcaption align="middle">Sample rate: 4</figcaption>
-      </td>
-      <td>
-        <img src="./screenshot_2-16_16-1-34.png" align="middle" width="400px"/>
-        <figcaption align="middle">Sample rate: 16</figcaption>
-      </td>
-    </tr>
+  <table style="width=100%">
+    <img src="./bez.png" align="middle" width="600px"/>
+    <figcaption align="middle">Screenshot of bez/teapot.bez</figcaption>
   </table>
 </div>
-
-<p>
-  As seen from the screenshots, as sampling rate increases, we get more graduated changes in color at the thin edges of our triangles.
-  This is because each pixel in the image is being averaged from multiple supersamples, and at the edge of a shape there will be only a fraction of samples inside the shape, hence resulting in a shade of the original color.
-  This effect reduces the appearance of artifacts since edges become "softer" in a sense, gradually changing between the shape and the surroundings, as opposed to an image without supersampling that simply takes the full color of the sampled pixel.
-</p>
 
 <h3 align="middle">Part 3: Transforms</h3>
   
 <div align="middle">
   <table style="width=100%">
-    <img src="./cubeman-swole.png" align="middle" width="600px"/>
-    <figcaption align="middle">Screenshot of svg/transforms/my_robot.svg</figcaption>
+    <img src="./bez.png" align="middle" width="600px"/>
+    <figcaption align="middle">Screenshot of bez/teapot.bez</figcaption>
   </table>
 </div>
 <p>
