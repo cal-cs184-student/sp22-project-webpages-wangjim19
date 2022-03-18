@@ -97,6 +97,64 @@ Thus, ray tracing time becomes proportional to the depth of the BVH tree, which 
 
 <h2 align="middle">Part 3: Direct Illumination</h2>
 <p>
+The first direct lighting function is uniform hemisphere sampling. Here, for a given intersection, we estimate the integral over all rays out of the hemisphere surrounding the intersection point.
+This is done using the Monte Carlo estimator and assuming that the probability of the ray going through any point on the hemisphere is uniform.
+For each sample, we cast a test ray from intersection point <code>hit_p</code> in a direction out of the hemisphere, checking for an intersection by that ray.
+If there is an intersection, the estimator term for that sample is calculated as the product of: f, the reflection from the sample ray direction towards the camera; Li, the emission from the intersected object; and cosj, the angle from the normal of the intersection to the sampled direction.
+We return the sum of all sample points, multipled by a constant factor of 2π/num_samples, since the surface area of the hemisphere is 2π.
+</p>
+<p>
+The second direct lighting function is importance sampling done by sampling the light sources in the image. Now, we iterate over all light sources in the scene, and sample uniformly within each light source.
+If a point source is reached, we only sample once. Otherwise, we take <code>ns_area_light</code> samples per light source, with the sample direction being drawn uniformly across the area of the light source.
+Since we are only sampling from the light source, we want to check if the ray intersects with any objects before the light.
+If there is no intersection, then we can calculate the estimator term as the product of: f, the reflection from the sample ray direction towards the camera; Li, the radiance from the sampled light source; and cosj, the angle from the normal of the intrsection to the sampled direction.
+Since we want each light source to be weighted equally in our estimator, we first calculate the contribution of the light source individually by dividing by the number of samples over the light source.
+Then, we sum each of the individual terms and divide by the total number of light sources in the scene.
+</p>
+        <div align="center">
+            <table style="width=100%;border:2px solid black">
+                <tr>
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-hemisphere.png" width="480px" />
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-importance.png" width="480px" />
+                </tr>
+                <tr>
+                    <td align="middle">
+                    <img src="./images/pt3-dragon-hemisphere.png" width="480px" />
+                    <figcaption align="middle">Renders with uniform hemisphere sampling</figcaption>
+                    <td align="middle">
+                    <img src="./images/pt3-dragon-importance.png" width="480px" />
+                    <figcaption align="middle">Renders with importance sampling</figcaption>
+                </tr>
+            </table>
+        </div>
+<br/>
+        <div align="center">
+            <table style="width=100%;border:2px solid black">
+                <tr>
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-1.png" width="480px" />
+                    <figcaption align="middle">1 light ray</figcaption>
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-4.png" width="480px" />
+                    <figcaption align="middle">4 light ray</figcaption>
+                </tr>
+                <tr>
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-16.png" width="480px" />
+                    <figcaption align="middle">16 light ray</figcaption>
+                    <td align="middle">
+                    <img src="./images/pt3-bunny-64.png" width="480px" />
+                    <figcaption align="middle">64 light ray</figcaption>
+                </tr>
+            </table>
+        </div>
+<p>
+Overall, we can see that uniform hemisphere sampling performs better than lighting sampling in almost all scenarios.
+As shown in the first table, with the same number of light and pixel samples, lighting sampling converges much and has much less noise compared to hemisphere sampling.
+Notably, in the dragon geometry, hemisphere sampling is not even able to render the object at a detectable brightness, since most samples in the hemisphere miss the light source.
+We also see that lighting sampling converges very quickly, with the bunny scene at 64 rays having very little detectable noise. In contrast, the render at 64 rays using hemisphere sampling still has significant noise.
 </p>
 
 <h2 align="middle">Part 4: Global Illumination</h2>
