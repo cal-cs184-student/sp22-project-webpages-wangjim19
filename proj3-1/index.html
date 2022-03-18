@@ -26,7 +26,7 @@ Some problems we encoutered were blank or missing components in our render, whic
 As we discovered the different types of errors we could encounter, it became easier to debug later parts of the project, as we had a better idea of where errors in our code were probably arising.
 </p>
 
-    <h2 align="middle">Part 1: Ray Generation and Intersection</h2>
+<h2 align="middle">Part 1: Ray Generation and Scene Intersection</h2>
 <p>
 </p>
         <div align="center">
@@ -39,7 +39,44 @@ As we discovered the different types of errors we could encounter, it became eas
             </table>
         </div>
 
-    <h2 align="middle">Collaboration</h2>
+<h2 align="middle">Part 2: Bounding Volume Heirarchy</h2>
+<p>
+Our BVH construction algorithm is as follows: First, iterate from the start to end iterator, constructing a bounding box for the primitives list and counting the number of primitives.
+If there are at most <code>max_leaf_size</code> primitives, then we are at a leaf node, so set the iterators and child pointers and return the new BVHNode.
+Otherwise, split the primitives list as follows: First, find the longest axis of the bounding box by checking its extent.
+Then, find the median of the primitive centroids along the longest axis using the <code>std::nth_element</code> function.
+Finally, split the existing iterators using the <code>std::partition</code> function, comparing in relation to the median along the longest axis.
+If one side of the split is empty, then simply increment or decrement the split iterator as needed.
+Finally, build the left and right BVHNodes recursively using the split list of primitives and return the final BVHNode.
+</p>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <figcaption align="bottom middle">Large files rendered with BVH acceleration</figcaption>
+                    <td align="middle">
+                    <img src="./images/pt2-planck.png" width="480px" />
+                    <td align="middle">
+                    <img src="./images/pt2-lucy.png" width="480px" />
+                </tr>
+            </table>
+        </div>
+<p>
+Rendering times...
+</p>
+
+<h2 align="middle">Part 3: Direct Illumination</h2>
+<p>
+</p>
+
+<h2 align="middle">Part 4: Global Illumination</h2>
+<p>
+</p>
+
+<h2 align="middle">Part 5: Adaptive Sampling</h2>
+<p>
+</p>
+
+<h2 align="middle">Collaboration</h2>
 <p>
 For collaboration, we found that splitting the project up by parts was effective for us. However, this doesn't mean we were working on each part independently.
 Rather, since each part of the project typically had some dependency on a different part, we first made sure we understood the big idea of each part. This served a two-fold purpose.
