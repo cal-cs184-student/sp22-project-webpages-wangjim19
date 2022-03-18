@@ -60,8 +60,39 @@ Finally, build the left and right BVHNodes recursively using the split list of p
                 </tr>
             </table>
         </div>
+<br/>
+        <div align="center">
+            <table style="border-collapse:collapse">
+Below are rendering times for some selected geometries:
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+                    <td style="border:1px solid black; width:33%" align="middle">
+Cow
+                    <td style="border:1px solid black; width:33%" align="middle">
+Beetle
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+No BVH
+                    <td style="border:1px solid black; width:33%" align="middle">
+22.89s
+                    <td style="border:1px solid black; width:33%" align="middle">
+29.21s
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+With BVH
+                    <td style="border:1px solid black; width:33%" align="middle">
+0.0079s
+                    <td style="border:1px solid black; width:33%" align="middle">
+0.0075s
+                </tr>
+            </table>
+        </div>
 <p>
-Rendering times...
+As we can see, BVH acceleration provides for a <em>significant</em> speedup in rendering time. As noted in the project spec, even a simple BVH construction can reduce ray tracing complexity from linear to logarithmic time.
+This is because of the underlying tree structure of BVH's. If a given ray does not intersect the bounding box of an internal node, then it can prune away all the child nodes, with all the primitives in the leaves on that side of the tree, from future intersection checks.
+Thus, ray tracing time becomes proportional to the depth of the BVH tree, which is simply O(log(n)).
 </p>
 
 <h2 align="middle">Part 3: Direct Illumination</h2>
@@ -89,6 +120,8 @@ On another note, since this project was much larger than previous ones, we had t
 </body>
 </html>
 
+<style>
 
+</style>
 
 
