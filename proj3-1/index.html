@@ -28,13 +28,35 @@ As we discovered the different types of errors we could encounter, it became eas
 
 <h2 align="middle">Part 1: Ray Generation and Scene Intersection</h2>
 <p>
+Ray generation consists of taking a pixel location and converting it to camera coordinates. This gives us a ray in camera space, which is converted to world space. The world space ray is tested for intersection with primitive shapes in the image, including triangles and spheres. Using this intersection information, we can determine where the light being sent to the camera is originating, and we can take samples from multiple rays to estimate a pixel color.
+
+For triangle intersections, we implemented Moller Trumbore. This algorithm uses various dot products and cross products to calculate the intersection t and barycentric coefficients given the triangle points, the ray origin, and ray direction. We then check if the t value is positive and lies within the min/max bounds of the ray.
+
 </p>
         <div align="center">
             <table style="width=100%">
                 <tr>
                     <td align="middle">
-                    <img src="images/example_image.png" width="480px" />
-                    <figcaption align="middle">Results Caption: my bunny is the bounciest bunny</figcaption>
+                    <img src="images/CBEmpty_normal.png" width="480px" />
+                    <figcaption align="middle">CB empty with normal shading</figcaption>
+                </tr>
+            </table>
+        </div>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="images/CBSpheres_normal.png" width="480px" />
+                    <figcaption align="middle">CB Spheres with normal shading</figcaption>
+                </tr>
+            </table>
+        </div>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="images/Banana_normal.png" width="480px" />
+                    <figcaption align="middle">Banana with normal shading</figcaption>
                 </tr>
             </table>
         </div>
