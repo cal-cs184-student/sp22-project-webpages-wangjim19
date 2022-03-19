@@ -291,6 +291,21 @@ We calculate the at least once bounce radiance with the new ray and intersection
 
 <h2 align="middle">Part 5: Adaptive Sampling</h2>
 <p>
+For adaptive sampling, we keep a sum of illuminances per pixel seen so far, and a sum of illuminances squared. Every num_samples samples, we calculate the standard deviation using the provided formula.
+Then we apply the inequality provided and break out of the sampling loop when it is satisfied.
+    
+    <div align="center">
+            <table style="width=100%;border:2px solid black">
+                <tr>
+                    <td align="middle">
+                    <img src="./images/bunny.png" width="480px" />
+                    <figcaption align="middle">Rendered Scene</figcaption>
+                    <td align="middle">
+                    <img src="./images/bunny_rate.png" width="480px" />
+                    <figcaption align="middle">Sample Rate Image</figcaption>
+                </tr>
+            </table>
+        </div>
 </p>
 
 <h2 align="middle">Collaboration</h2>
