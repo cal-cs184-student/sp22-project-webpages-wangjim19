@@ -55,7 +55,7 @@ For triangle intersections, we implemented Moller Trumbore. This algorithm uses 
             <table style="width=100%">
                 <tr>
                     <td align="middle">
-                    <img src="images/Banana_normal.png" width="480px" />
+                    <img src="images/banana_normal.png" width="480px" />
                     <figcaption align="middle">Banana with normal shading</figcaption>
                 </tr>
             </table>
@@ -181,6 +181,41 @@ We also see that lighting sampling converges very quickly, with the bunny scene 
 
 <h2 align="middle">Part 4: Global Illumination</h2>
 <p>
+For the indirect lighting function, we first add the one-bounce radiance. Then, we generate a random incident direction from the intersection and convert to a ray in world coordinates. Then, we calculate the closest intersection of this ray.
+If there is an intersection and depth of the ray is less than the max depth and greater than 1 (for max ray depth > 1, we use at least one indirect ray), we flip a coin for russian roulette and recurse with probability 0.65.
+We calculate the at least once bounce radiance with the new ray and intersection, and multiply by the reflectance of this ray and by cos theta, then divide by the sampled pdf and the continuation probability and add that to the one bounce radiance.
+    
+    <div align="center">
+        <table style="width=100%">
+            <tr>
+                <figcaption align="bottom middle">Images rendered with global illumination</figcaption>
+                <td align="middle">
+                <img src="./images/pt4-bunny.png" width="480px" />
+                <td align="middle">
+                <img src="./images/pt4-spheres.png" width="480px" />
+            </tr>
+        </table>
+    </div>
+        
+    <div align="center">
+        <table style="width=100%">
+            <tr>
+                <td align="middle">
+                <img src="images/spheres_only_direct.png" width="480px" />
+                <figcaption align="middle">Only direct lighting</figcaption>
+            </tr>
+        </table>
+    </div>
+        
+    <div align="center">
+        <table style="width=100%">
+            <tr>
+                <td align="middle">
+                <img src="images/spheres_only_indirect.png" width="480px" />
+                <figcaption align="middle">Only indirect lighting</figcaption>
+            </tr>
+        </table>
+    </div>
 </p>
 
 <h2 align="middle">Part 5: Adaptive Sampling</h2>
