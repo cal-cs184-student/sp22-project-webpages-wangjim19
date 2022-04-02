@@ -1,7 +1,98 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 3-2 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+  </style> 
+<title>Assignment 3: Pathtracer  |  CS 184</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle">Assignment 3: PathTracer</h1>
+    <h2 align="middle">Jim Wang, Alan Zhu</h2>
+    <h2 align="middle">webpage link: https://cal-cs184-student.github.io/sp22-project-webpages-wangjim19/proj3-2/index.html</h2>
+
+    <div class="padded">
+<p>
+In this project, we implmented structures to model new types of materials. Specifically, we implmented reflective and refractive materials in Part 1, and microfacet materials in Part 2.
+Our approach to this project was to follow the various equations presented in class. We found the lecture slides and in-line code comments to be especially helpful in correctly implementing the various mathematical equations for each section.
+Some problems we encountered were dark spots or blank areas in our renders. These were helpfully addressed in the project spec, and after double-checking our math we were able to resolve our issues.
+</p>
+
+<h2 align="middle">Part 1: Mirror and Glass Materials</h2>
+
+<h2 align="middle">Part 2: Microfacet Materials</h2>
+<p>
+In this section, we implemented microfacet materials. To do so, we simply followed the equations and implementation notes outlined in the project spec, and we were able to get the correct results without much issue.
+</p>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <figcaption align="bottom middle">Large files rendered with BVH acceleration</figcaption>
+                    <td align="middle">
+                    <img src="./images/pt2-planck.png" width="480px" />
+                    <td align="middle">
+                    <img src="./images/pt2-lucy.png" width="480px" />
+                </tr>
+            </table>
+        </div>
+<br/>
+        <div align="center">
+            <table style="border-collapse:collapse">
+Below are rendering times for some selected geometries:
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+                    <td style="border:1px solid black; width:33%" align="middle">
+Cow
+                    <td style="border:1px solid black; width:33%" align="middle">
+Beetle
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+No BVH
+                    <td style="border:1px solid black; width:33%" align="middle">
+22.89s
+                    <td style="border:1px solid black; width:33%" align="middle">
+29.21s
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:33%" align="middle">
+With BVH
+                    <td style="border:1px solid black; width:33%" align="middle">
+0.0079s
+                    <td style="border:1px solid black; width:33%" align="middle">
+0.0075s
+                </tr>
+            </table>
+        </div>
+<p>
+As we can see, BVH acceleration provides for a <em>significant</em> speedup in rendering time. As noted in the project spec, even a simple BVH construction can reduce ray tracing complexity from linear to logarithmic time.
+This is because of the underlying tree structure of BVH's. If a given ray does not intersect the bounding box of an internal node, then it can prune away all the child nodes, with all the primitives in the leaves on that side of the tree, from future intersection checks.
+Thus, ray tracing time becomes proportional to the depth of the BVH tree, which is simply O(log(n)).
+</p>
+
+<h2 align="middle">Collaboration</h2>
+<p>
+For collaboration, we found that splitting the project up by parts was effective for us. However, this doesn't mean we were working on each part independently.
+Rather, since each part of the project typically had some dependency on a different part, we first made sure we understood the big idea of each part. This served a two-fold purpose.
+First, when working on the sections individually we had a better idea of what would be/had been implemented in a different part.
+Secondly, having an understanding of the other member's task allowed us to do code reviews, lending fresh eyes to each others' code when we found ourselves stuck on a stubborn bug.
+On another note, since this project was much larger than previous ones, we had to devise a way to effectively version control, and started using branches for each part, communicating when branches were tested/ready to be merged into the master branch.
+</p>
+
+</div>
+</body>
 </html>
+
+<style>
+
+</style>
+
+
