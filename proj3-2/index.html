@@ -35,56 +35,54 @@ In this section, we implemented microfacet materials. To do so, we simply follow
         <div align="center">
             <table style="width=100%">
                 <tr>
-                    <figcaption align="bottom middle">Large files rendered with BVH acceleration</figcaption>
+                    <figcaption align="bottom middle">Scenes rendered with different &alpha; values</figcaption>
                     <td align="middle">
-                    <img src="./images/pt2-planck.png" width="480px" />
+                    <img src="./images/dragon_0.005.png" width="480px" />
+                    <figcaption align="bottom middle">&alpha; = 0.005</figcaption>
                     <td align="middle">
-                    <img src="./images/pt2-lucy.png" width="480px" />
-                </tr>
-            </table>
-        </div>
-<br/>
-        <div align="center">
-            <table style="border-collapse:collapse">
-Below are rendering times for some selected geometries:
-                <tr>
-                    <td style="border:1px solid black; width:33%" align="middle">
-                    <td style="border:1px solid black; width:33%" align="middle">
-Cow
-                    <td style="border:1px solid black; width:33%" align="middle">
-Beetle
+                    <img src="./images/dragon_0.05.png" width="480px" />
+                    <figcaption align="bottom middle">&alpha; = 0.05</figcaption>
                 </tr>
                 <tr>
-                    <td style="border:1px solid black; width:33%" align="middle">
-No BVH
-                    <td style="border:1px solid black; width:33%" align="middle">
-22.89s
-                    <td style="border:1px solid black; width:33%" align="middle">
-29.21s
-                </tr>
-                <tr>
-                    <td style="border:1px solid black; width:33%" align="middle">
-With BVH
-                    <td style="border:1px solid black; width:33%" align="middle">
-0.0079s
-                    <td style="border:1px solid black; width:33%" align="middle">
-0.0075s
+                    <td align="middle">
+                    <img src="./images/dragon_0.25.png" width="480px" />
+                    <figcaption align="bottom middle">&alpha; = 0.25</figcaption>
+                    <td align="middle">
+                    <img src="./images/dragon_0.5.png" width="480px" />
+                    <figcaption align="bottom middle">&alpha; = 0.5</figcaption>
                 </tr>
             </table>
         </div>
 <p>
-As we can see, BVH acceleration provides for a <em>significant</em> speedup in rendering time. As noted in the project spec, even a simple BVH construction can reduce ray tracing complexity from linear to logarithmic time.
-This is because of the underlying tree structure of BVH's. If a given ray does not intersect the bounding box of an internal node, then it can prune away all the child nodes, with all the primitives in the leaves on that side of the tree, from future intersection checks.
-Thus, ray tracing time becomes proportional to the depth of the BVH tree, which is simply O(log(n)).
+In the figures above, we can see that with lower &alpha;, the material is more glossy, while with higher &alpha;, the material is more diffuse. This is in line with the explanations given in the project spec and in lecture: higher &alpha; values cause the microfacet surface to be more rough and spread out, creating a diffuse macrosurface, while lower &alpha; values cause the microfacet normals to have a more concentrated distribution and the resulting distribution to have a more glossy appearance.
 </p>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <figcaption align="bottom middle">Scenes rendered with different sampling methods</figcaption>
+                    <td align="middle">
+                    <img src="./images/bunny_hemisphere.png" width="480px" />
+                    <figcaption align="bottom middle">Cosine hemisphere sampling</figcaption>
+                    <td align="middle">
+                    <img src="./images/bunny_importance.png" width="480px" />
+                    <figcaption align="bottom middle">Importance sampling</figcaption>
+                </tr>
+            </table>
+        </div>
+<p>
+In the figures above, we see that cosine hemisphere sampling results in significantly noise in the image, especially on the surface of the microfacet material.
+This is because the cosine hemisphere sampling is more suited for diffuse materials, while the actual surface is quite glossy. This causes many of the samples in hemisphere sampling to not detect/reflect any light.
+In contrast, the Beckmann model offers a more accurate idea of which regions incoming light would have to come from in order to reflect back off the surface of the material into the camera, so the bright/dark regions are largely correctly lit.
+</p>
+		<div align="center">
+				<figcaption align="bottom middle">Bunny rendered as titanium</figcaption>
+				<img src="./images/bunny_titanium.png" width="480px" />
+		</div>
 
 <h2 align="middle">Collaboration</h2>
 <p>
-For collaboration, we found that splitting the project up by parts was effective for us. However, this doesn't mean we were working on each part independently.
-Rather, since each part of the project typically had some dependency on a different part, we first made sure we understood the big idea of each part. This served a two-fold purpose.
-First, when working on the sections individually we had a better idea of what would be/had been implemented in a different part.
-Secondly, having an understanding of the other member's task allowed us to do code reviews, lending fresh eyes to each others' code when we found ourselves stuck on a stubborn bug.
-On another note, since this project was much larger than previous ones, we had to devise a way to effectively version control, and started using branches for each part, communicating when branches were tested/ready to be merged into the master branch.
+For this project, we collaborated by dividing the project into parts. Since we only had to do two parts, and the first two parts of the project were largely separate from each other, we found splitting the work to be very effective for us.
+Since we struggled to meet the deadline on the last project, we also made an effort on this project to get started earlier. We started planning earlier for when to start the project and how to divide the work, and we found that we were able to work at a more comfortable pace on this project as a result.
 </p>
 
 </div>
