@@ -66,6 +66,18 @@ Some problems we encountered were dark spots or blank areas in our renders. Thes
 		    </tr>
 		</table>
 	    </div>
+<p>
+	When max_ray_depth = 0, the only light comes directly from the light source. When max_ray_depth = 1, we now see light reflecting off the walls and the spheres,
+	so we can see the walls and the patches of light in the spheres. When max_ray_depth = 2, we can see light bouncing off the walls, hitting the sphere, and reflecting
+	off the sphere. This results in the reflection of the room in the spheres. We can also see the light reflecting off the spheres, then bouncing off the ceiling, which
+	causes the illumination of the ceiling. When max_ray_depth = 3, we can see refraction effects: light bounces off the wall, gets refracted into the front sphere, gets
+	refracted out of the front sphere, and reaches the camera. This allows us to see the walls in the front sphere. We can also see the ceiling in the back sphere, since
+	light can get reflected off the sphere, hit the ceiling, then come back to the sphere to get reflected to the camera. We also see light refracting into the front 
+	sphere, onto out of the front sphere, then reflecting off the ground to the camera. This creates the bright patch in the shadow. When max_ray_depth = 4, the refracted 
+	light from the front sphere can be reflected off the back sphere: light hits the wall, gets refracted into the front sphere, gets refracted out of the front sphere, 
+	then gets reflected by the back sphere to the camera. This shows the color of the purple wall in the back sphere. For m=5 and 100, there are no more obvious multi-
+	bounce effects except light bouncing back and forth between spheres, walls, and floor/ceiling, so there are no additional obvious visual effects.
+</p>
 <h2 align="middle">Part 2: Microfacet Materials</h2>
 <p>
 In this section, we implemented microfacet materials. To do so, we simply followed the equations and implementation notes outlined in the project spec, and we were able to get the correct results without much issue.
