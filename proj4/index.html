@@ -131,6 +131,81 @@ We ran into some issues during plane collision implementation where the cloth wo
 </div>
 
 <h2 align="middle">Part 4: Handling self-collisions</h2>
+	    
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Cloth falling: early collision</figcaption> 
+			<img src="./images/cloth-fall-1.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Cloth falling: mid collision</figcaption> 
+			<img src="./images/cloth-fall-2.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Cloth falling: end collision</figcaption> 
+			<img src="./images/cloth-fall-2.png" width="720px"/>
+		</tr>
+	</table>
+</div>
+<p>
+	Modifying the density changes how tightly the cloth folds on itself. The higher the density, the more folds/creases there are, and the tighter
+	these creases are.
+</p>
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Density = 1</figcaption> 
+			<img src="./images/cloth-density-1.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Density = 5</figcaption> 
+			<img src="./images/cloth-density-5.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Density = 20</figcaption> 
+			<img src="./images/cloth-density-20.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Density = 100</figcaption> 
+			<img src="./images/cloth-density-100.png" width="720px"/>
+		</tr>
+	</table>
+</div>
+<p>
+	Varying the ks changes how bunched up the cloth is as it falls. Smaller ks scrunches the cloth, causing tighter folds and more wrinkles.
+</p>
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">ks = 1</figcaption> 
+			<img src="./images/cloth-ks-1.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">ks = 1000</figcaption> 
+			<img src="./images/cloth-ks-1000.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">ks = 5000</figcaption> 
+			<img src="./images/cloth-ks-5000.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">ks = 10000</figcaption> 
+			<img src="./images/cloth-ks-10000.png" width="720px"/>
+		</tr>
+	</table>
+</div> 
 
 <h2 align="middle">Part 5: Shaders</h2>
 
