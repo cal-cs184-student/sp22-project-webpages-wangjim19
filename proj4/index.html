@@ -125,12 +125,19 @@ We ran into some issues during plane collision implementation where the cloth wo
 		<tr>
 			<td align="middle">
 			<figcaption align="middle">Cloth at rest on plane</figcaption> 
-			<img src="./images/plane_resting.png" width="720px"/>
+			<img src="./images/plane-resting-shaded.png" width="720px"/>
 		</tr>
 	</table>
 </div>
 
 <h2 align="middle">Part 4: Handling self-collisions</h2>
+<p>
+	To handle self-collisions, we split the 3d region into boxes, and when simulating, we repeatedly build maps that map a float identifier for a box
+	to a list of point masses within the box. To calculate this identifier, we first round a point mass's position to its nearest box's corner
+	position, then take the new xyz coordinates to calculate a float value: x + y * width * height + z * (width * height)^2. Then, we check for 
+	collisions between each point mass and the other point masses in its box by finding its box (hash, then map lookup). For each point mass, we get
+	all colliding particles and correct the position of the point mass using a vector that aims to bring it to 2*thickness away. The final correction
+	is the average of each of these corrections, divided by simulation_steps.
 	    
 <div align="center">
 	<table>
@@ -208,6 +215,7 @@ We ran into some issues during plane collision implementation where the cloth wo
 </div> 
 
 <h2 align="middle">Part 5: Shaders</h2>
+	    
 
 </div>
 </body>
