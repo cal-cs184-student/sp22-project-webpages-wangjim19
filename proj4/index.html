@@ -21,32 +21,114 @@
 
     <div class="padded">
 <p>
-Summary
+In this project, we explored a framework for the physical simulation of a cloth in various environments. We modeled the cloth using point masses connected by springs in order to capture its physical dynamics and behaviors.
+We also implemented some shaders in order to render different cloth materials more quickly.
+We did not encounter many major problems in the course of our implementation. We found the point mass and springs framework to be quite robust, with data structures that interacted nicely with the vector mathematics behind the physics.
 </p>
 
 <h2 align="middle">Part 1: Masses and springs</h2>
+<p>
+In this section, we created the actual PointMass and Spring data structures within our cloth. First, we made the point masses, looping in row-major order to populate the <code>point_masses</code> vector correctly.
+Then, we created the springs by again iterating through all of the point masses. We performed some basic casework on the coordinates of the point masses within our cloth to add the correct springs when necessary, and overall the process was pretty painless.
+</p>
+
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">No shearing constraints</figcaption> 
+			<img src="./images/wireframe_no_shearing.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Only shearing constraints</figcaption> 
+			<img src="./images/wireframe_only_shearing.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">All constraints</figcaption> 
+			<img src="./images/wireframe_all_constraints.png" width="720px"/>
+		</tr>
+	</table>
+</div>
 
 <h2 align="middle">Part 2: Simulation via numerical integration</h2>
 <p>
-Low ks
-with low ks, the cloth is more loose and droops more. This is likely because the low ks makes it so that the spring correction forces are lower, so the cloth appears less taut.
-we also notice more ripples in the final resting state of the cloth, as the pieces hang more loosely
+In this section, we use numerical integration to calculate the total forces acting on each point mass. First, we account for external forces, such as gravity, which are applied to all point masses in the cloth.
+Then, we use Verlet integration to approximate the force by the string constraints on the point masses. This is done in accordance to the formulas presented in the spec.
+Finally, we constrain the displacement of the point masses so that they are not unreasonably deformed. There is some basic casework here to handle cases of pinned point masses, but overall the implementation is quite clean.
 </p>
 <p>
-High ks
-with high ks, the cloth appears much more rigid. Since the spring constant is high, the spring correction forces keep the cloth from deforming as much. As such, throughout the dropping process the cloth is more flat.
+Changing the spring constant <code>ks</code>:
+With a high spring constant, the cloth appears much more rigid than with the default settings.
+Since the spring constant is high, the spring correction forces keep the cloth from deforming as much. As such, throughout the dropping process the cloth is more flat.
+With a lower spring constant, the cloth appears more loose and droopy. This is likely because the low spring constant makes it so that the spring correction forces are lower, so the cloth appears less taut.
+We also notice more ripples in the final resting state of the cloth, as the pieces hang more loosely.
 </p>
+<div align="center">
+	<figcaption align="middle">Final resting state with low spring constant</figcaption> 
+	<img src="./images/pinned2_low_ks.png" width="720px"/>
+</div>
 <p>
-Density
+Changing density:
 As density increases, so does the total mass of the cloth. As such, with higher density, the cloth hangs lower at resting position. With lower density, the cloth appears to move as a much lighter sheet and does not hang as low when at rest.
 </p>
 <p>
-Damping
-when damping is low, the behavior of the cloth during movement is much more erratic since the spring forces are stronger. For example, the screenshot shows lots of ripples and waves that form while the cloth is dropping with low damping.
+Changing damping:
+When damping is low, the behavior of the cloth during movement is much more erratic since the spring forces are stronger. For example, the screenshot shows lots of ripples and waves that form while the cloth is dropping with low damping.
 In contrast, with high damping, the cloth drops in a very smooth manner, as the spring corrections are lesser and most of the movement comes from gravity.
 </p>
+<div align="center">
+	<figcaption align="middle">Erratic behavior when the cloth is dropped with low damping</figcaption> 
+	<img src="./images/pinned2_low_damping.png" width="720px"/>
+</div>
+<br />
+<div align="center">
+	<figcaption align="middle">Final resting state of pinned4 scene</figcaption> 
+	<img src="./images/pinned4_resting.png" width="720px"/>
+</div>
 
 <h2 align="middle">Part 3: Handling collisions with other objects</h2>
+<p>
+In this section, we handle collisions of the cloth with some different objects. We updated the simulation method to include collision correction between each point mass and each object in the scene after all forces were calculated.
+</p>
+<p>
+For collision detection with a sphere, we checked if the point mass intersected the sphere by comparing its distance from the origin to the radius of the sphere.
+If the point mass intersected the sphere, then we calculated the correction vector by subtracting the last position from the tangent point.
+Finally, we reassigned the new position by adding a scaled correction vector to the last position.
+</p>
+<p>
+For collision detection with a plane, we checked if the point mass intersected the sphere by taking the dot product of the vectors from the new and last positions to the plane and the normal and comparing the signs of the dot products.
+If they had different signs, then there was an intersection.
+To find the intersection point, we projected the vector from the new position to a point on the plane to the vector between the new and last positions.
+We calculated the correction vector by subtracting the last position from the intersection point, with magnitude determined by the surface offset.
+Finally, we reassigned the new position by adding a scaled correction vector to the last position.
+We ran into some issues during plane collision implementation where the cloth would fall through the plane, but after double-checking our usage of the surface offset, we were able to get the correct behavior.
+</p>
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Sphere resting with <code>ks=5000</code></figcaption> 
+			<img src="./images/sphere_5000.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Sphere resting with <code>ks=500</code></figcaption> 
+			<img src="./images/sphere_500.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Sphere resting with <code>ks=50000</code></figcaption> 
+			<img src="./images/sphere_50000.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Cloth at rest on plane</figcaption> 
+			<img src="./images/plane_resting.png" width="720px"/>
+		</tr>
+	</table>
+</div>
 
 <h2 align="middle">Part 4: Handling self-collisions</h2>
 
