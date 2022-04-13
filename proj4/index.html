@@ -215,7 +215,119 @@ We ran into some issues during plane collision implementation where the cloth wo
 </div> 
 
 <h2 align="middle">Part 5: Shaders</h2>
+
+<p>
+	Shader programs intend to accelerate the graphics pipeline by running one specific function in parallel (e.g. shading). Vertex shaders and fragment
+	shaders are two examples of shader programs. Vertex shaders do things like transform positions and normals between coordinate systems. The outputs
+	of these are fed into fragment shaders, which take vertex positions, normals, camera/light positions, etc and output colors for pixels by doing
+	operations like texture sampling, lighting calculations, etc. This ultimately produces the desired texture and lighting effects.
+</p>
+<p>
+	To implement our shader programs, we followed the equations supplied in the spec. Challenges included normalization issues, which caused some 
+	lighting overexposure and other unwanted effects. Also, understanding the syntax of GLSL was a challenge at first.
+</p>
+<p>
+	The Blinn-Phong model combines ambient, diffuse, and specular shading components. Ambient refers to color that does not depend on reflected/
+	transmitted light, but is just a constant light that illuminates everything. Diffuse shading refers to light that is reflected equally in all
+	viewing directions (e.g. the natural color of a cup). Specular shading refers to light that is reflected primarily in the mirrored direction
+	(e.g. the highlights/glare on shiny objects). The blinn-phong model scales each of these parts by coefficients and sums them to create a holistic
+	lighting effect.
+</p>
 	    
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Ambient component only</figcaption> 
+			<img src="./images/blinn-phong-ambient.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Diffuse component only</figcaption> 
+			<img src="./images/blinn-phong-diffuse.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Specular component only</figcaption> 
+			<img src="./images/blinn-phong-specular.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Entire blinn phong model</figcaption> 
+			<img src="./images/blinn-phong-full.png" width="720px"/>
+		</tr>
+	</table>
+</div> 
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Texture mapping shader with custom texture</figcaption> 
+			<img src="./images/custom-texture.png" width="720px"/>
+		</tr>
+	</table>
+</div> 
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Bump mapping on sphere and cloth</figcaption> 
+			<img src="./images/bump-sphere-cloth.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Displacement mapping sphere</figcaption> 
+			<img src="./images/displacement-sphere.png" width="720px"/>
+		</tr>
+	</table>
+</div> 
+<p>
+	Bump mapping simulates bumps/height differences in geometry by only changing the image (i.e. the lightness/darkness of the color values that are 
+	selected. Displacement mapping changes the geometry itself, adding height differences to the positions and normals. Displacement mapping tends
+	to create more realistic looking bumps, while bump mapping tends to appear a bit smoother.
+</p>
+<div align="center">
+    <table style="width=100%">
+	<tr>
+	    <td align="middle">
+	    <img src="./images/bump-16.png" width="480px" />
+	    <figcaption align="bottom middle">bump mapping -o 16 -a 16</figcaption>
+	    <td align="middle">
+	    <img src="./images/displacement-16.png" width="480px" />
+	    <figcaption align="bottom middle">displacement mapping -o 16 -a 16</figcaption>
+	</tr>
+	<tr>
+	    <td align="middle">
+	    <img src="./images/bump-128.png" width="480px" />
+	    <figcaption align="bottom middle">bump mapping -o 128 -a 128</figcaption>
+	    <td align="middle">
+	    <img src="./images/displacement-128.png" width="480px" />
+	    <figcaption align="bottom middle">displacement mapping -o 128 -a 128</figcaption>
+	</tr>
+    </table>
+</div>
+<p>
+	The coarseness of the sphere mesh changes the smoothness of the texture mapping. In both bump and displacement mapping, edges become smoother and
+	more realistic when the sphere mesh is more finegrained (128). The difference in displacement mapping is more pronounced, as we can notice rough
+	edges around the sphere which disappear and give way to fine details in the bumps with the finer mesh.
+</p>
+<div align="center">
+	<table>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Mirror mapping on the cloth and sphere</figcaption> 
+			<img src="./images/mirror-cloth-and-sphere.png" width="720px"/>
+		</tr>
+		<tr>
+			<td align="middle">
+			<figcaption align="middle">Mirror mapping on the cloth on the sphere</figcaption> 
+			<img src="./images/mirror-cloth-on-sphere.png" width="720px"/>
+		</tr>
+	</table>
+</div>
+	    
+	    
+<p>
 
 </div>
 </body>
